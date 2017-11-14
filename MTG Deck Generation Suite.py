@@ -192,34 +192,35 @@ def choose_program():
             return int(userInput)
 
 
-# Parsing the json database
-jsonCards = open(jsonName)
-for line in jsonCards:
-    parsedJson = json.loads(line)
-    #print(parsedJson['Nahiri, the Harbinger'])
-jsonCards.close()
+if __name__ == "__main__":
+    # Parsing the json database
+    jsonCards = open(jsonName)
+    for line in jsonCards:
+        parsedJson = json.loads(line)
+        #print(parsedJson['Nahiri, the Harbinger'])
+    jsonCards.close()
 
-program = choose_program()
+    program = choose_program()
 
-# Starting off the Cockatrice deck file
-deck = ['<?xml version="1.0" encoding="UTF-8"?>\n', '<cockatrice_deck version="1">\n', '    <deckname></deckname>\n', '    <comments></comments>\n', '    <zone name="main">\n']
+    # Starting off the Cockatrice deck file
+    deck = ['<?xml version="1.0" encoding="UTF-8"?>\n', '<cockatrice_deck version="1">\n', '    <deckname></deckname>\n', '    <comments></comments>\n', '    <zone name="main">\n']
 
-# Run the chosen deck generation program
-if (program == 1):
-    random_deck()
-if (program == 2):
-    deck.append(color_gen(2))
-if (program == 3):
-    deck.append(land_gen(2))
-if (program == 4):
-    deck.append(cantrip_gen())
-if (program == 5):
-    deck.append(planeswalker_gen())
+    # Run the chosen deck generation program
+    if (program == 1):
+        random_deck()
+    if (program == 2):
+        deck.append(color_gen(2))
+    if (program == 3):
+        deck.append(land_gen(2))
+    if (program == 4):
+        deck.append(cantrip_gen())
+    if (program == 5):
+        deck.append(planeswalker_gen())
 
-# Ending the Cockatrice deck file
-deck.append('    </zone>\n')
-deck.append('</cockatrice_deck>\n')
+    # Ending the Cockatrice deck file
+    deck.append('    </zone>\n')
+    deck.append('</cockatrice_deck>\n')
 
-with open(direc + deckName, "w") as f:
-    for line in deck:
-        f.write(line)
+    with open(direc + deckName, "w") as f:
+        for line in deck:
+            f.write(line)
