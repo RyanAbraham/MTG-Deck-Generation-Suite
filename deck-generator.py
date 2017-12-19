@@ -3,16 +3,17 @@
 #
 # To be used with Cockatrice
 
-import os, random, sys, json
+import os
+import random
+import sys
+import json
 
 # Path variables
-jsonName = 'AllCards.json'
+JSON_NAME = 'AllCards.json'
 # Set the deck path to save to
-deck_path = ""
-deck_name = 'ZZZCreated Deck.cod'
-programs = ['Random Deck Selector', 'Color Deck Generator', 'Land Generator']
-
-mode = 1
+DECK_PATH = ""
+DECK_NAME = 'ZZZCreated Deck.cod'
+PROGRAMS = ['Random Deck Selector', 'Color Deck Generator', 'Land Generator']
 
 
 def get_random_card(**kwargs):
@@ -77,9 +78,9 @@ def get_random_card(**kwargs):
 def random_deck():
     """Chooses one of your decks at random
     """
-    deck = open(deck_path + random.choice(os.listdir(deck_path)))
+    deck = open(DECK_PATH + random.choice(os.listdir(DECK_PATH)))
     
-    with open(deck_path + "ZZZRandom Deck.cod", "w") as f:
+    with open(DECK_PATH + "ZZZRandom Deck.cod", "w") as f:
         for line in deck:
             f.write(line)
     deck.close()
@@ -89,7 +90,7 @@ def color_gen(num):
     num (int) - Number of colors to generate for the deck
     """
     if (num < 1 or num > 5):
-        sys.exit("INVALID NUMBER OF COLORS: " + str(kwargs))
+        sys.exit("INVALID NUMBER OF COLORS: " + str(num))
         return None
     cards = ""
     # Choose two random colors
@@ -125,7 +126,7 @@ def land_gen(num):
     num (int) - Number of colors to generate for the deck
     """
     if (num < 1 or num > 5):
-        sys.exit("INVALID NUMBER OF COLORS: " + str(kwargs))
+        sys.exit("INVALID NUMBER OF COLORS: " + str(num))
         return None
     cards = ""
     # Choose two random colors
@@ -156,18 +157,18 @@ def land_gen(num):
 def choose_program():
     """ Takes in user input to choose a program to run
     """
-    inputStr = 'Welcome to the Deck Generation Suite! Choose a program to run:'
-    for i, program in enumerate(programs):
-        inputStr += '\n' + str(i+1) + ': ' + program
+    input_str = 'Welcome to the Deck Generation Suite! Choose a program to run:'
+    for i, program in enumerate(PROGRAMS):
+        input_str += '\n' + str(i+1) + ': ' + program
     while (True):
-        userInput = input(inputStr + '\n')
-        if (userInput.isdigit()):
-            return int(userInput)
+        user_input = input(input_str + '\n')
+        if (user_input.isdigit()):
+            return int(user_input)
 
 
 if __name__ == "__main__":
     # Parsing the json database
-    json_file = open(jsonName)
+    json_file = open(JSON_NAME)
     json_cards = json_file.read()
     parsed_json = json.loads(json_cards)
     json_file.close()
@@ -190,8 +191,8 @@ if __name__ == "__main__":
     deck.append('</cockatrice_deck>\n')
 
     # Now write to the deck file
-    with open(deck_path + deck_name, "w") as f:
+    with open(DECK_PATH + DECK_NAME, "w") as f:
         for line in deck:
             f.write(line)
 
-    print("Deck generated in %s" % deck_path)
+    print("Deck generated in %s" % DECK_PATH)

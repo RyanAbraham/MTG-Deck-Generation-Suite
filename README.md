@@ -6,7 +6,7 @@ How to Use
 ----------
 Python 3.X is required, as well as any version of Cockatrice.
 
-1. Clone or download this repo
+1. Clone or download this repository
 
 2. Download the AllCards.json file from https://mtgjson.com/ and put it in the same folder as the Python file
 
