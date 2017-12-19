@@ -8,8 +8,8 @@ import os, random, sys, json
 # Path variables
 jsonName = 'AllCards.json'
 # Set the deck path to save to
-direc = "YOUR_PATH_HERE"
-deckName = 'ZZZCreated Deck.cod'
+deck_path = "YOUR_PATH_HERE"
+deck_name = 'ZZZCreated Deck.cod'
 programs = ['Random Deck Selector', 'Color Deck Generator', 'Land Generator']
 
 mode = 1
@@ -21,12 +21,12 @@ def get_random_card(**kwargs):
     kwargs (dict) - Stores all attributes to search for in a card
     """
     
-    cardStr = ""
-    cardStr += '        <card number="1" price="0" name="'
+    card_str = ""
+    card_str += '        <card number="1" price="0" name="'
     # After ten thousand search attempts, if none worked, it returns a failed search
     for i in range(10000):
         valid = True
-        card = parsedJson[random.choice(list(parsedJson))]
+        card = parsed_json[random.choice(list(parsed_json))]
         # For each attribute in kwargs, verify that the card matches the search query
         for key, value in kwargs.items():
             if (key == 'text'):
@@ -68,18 +68,18 @@ def get_random_card(**kwargs):
             else:
                 print('Error: Unkown key \'' + key + '\'')
         if (valid):
-            cardStr += card.get('name')
-            cardStr += '"/>\n'
-            return cardStr
+            card_str += card.get('name')
+            card_str += '"/>\n'
+            return card_str
     sys.exit("SEARCH FAILED with parameters" + str(kwargs))
     return None
 
 def random_deck():
     """Chooses one of your decks at random
     """
-    deck = open(direc + random.choice(os.listdir(direc)))
+    deck = open(deck_path + random.choice(os.listdir(deck_path)))
     
-    with open(direc + "ZZZRandom Deck.cod", "w") as f:
+    with open(deck_path + "ZZZRandom Deck.cod", "w") as f:
         for line in deck:
             f.write(line)
     deck.close()
@@ -95,26 +95,26 @@ def color_gen(num):
     # Choose two random colors
     colors = random.sample(['w', 'u', 'b', 'r', 'g'], num)
     for color in colors:
-        colorStr = ''
+        color_str = ''
         # Add basic lands
         if(color == 'w'):
             cards += '        <card number="10" price="0" name="Plains"/>\n'
-            colorStr += 'white'
+            color_str += 'white'
         elif(color == 'u'):
             cards += '        <card number="10" price="0" name="Island"/>\n'
-            colorStr += 'blue'
+            color_str += 'blue'
         elif(color == 'b'):
             cards += '        <card number="10" price="0" name="Swamp"/>\n'
-            colorStr += 'black'
+            color_str += 'black'
         elif(color == 'r'):
             cards += '        <card number="10" price="0" name="Mountain"/>\n'
-            colorStr += 'red'
+            color_str += 'red'
         elif(color == 'g'):
             cards += '        <card number="10" price="0" name="Forest"/>\n'
-            colorStr += 'green'
+            color_str += 'green'
         # Add non-lands
         for i in range(18):
-            cards += get_random_card(colors = colorStr)
+            cards += get_random_card(colors = color_str)
     # Add dual/utility lands
     for i in range(4):
         cards += get_random_card(types = 'land', text = ['{'+colors[0]+'}', '{'+colors[1]+'}'])
@@ -131,20 +131,20 @@ def land_gen(num):
     # Choose two random colors
     colors = random.sample(['w', 'u', 'b', 'r', 'g'], num)
     for color in colors:
-        colorStr = ''
+        color_str = ''
         if(color == 'w'):
-            colorStr += 'white'
+            color_str += 'white'
         elif(color == 'u'):
-            colorStr += 'blue'
+            color_str += 'blue'
         elif(color == 'b'):
-            colorStr += 'black'
+            color_str += 'black'
         elif(color == 'r'):
-            colorStr += 'red'
+            color_str += 'red'
         elif(color == 'g'):
-            colorStr += 'green'
+            color_str += 'green'
         # Add non-lands
         for i in range(18):
-            cards += get_random_card(colors = colorStr)
+            cards += get_random_card(colors = color_str)
     # Add dual/utility lands
     for i in range(14):
         cards += get_random_card(types = 'land', text = ['{'+colors[0]+'}', '{'+colors[1]+'}'])
@@ -167,10 +167,10 @@ def choose_program():
 
 if __name__ == "__main__":
     # Parsing the json database
-    jsonFile = open(jsonName)
-    jsonCards = jsonFile.read()
-    parsedJson = json.loads(jsonCards)
-    jsonFile.close()
+    json_file = open(jsonName)
+    json_cards = json_file.read()
+    parsed_json = json.loads(json_cards)
+    json_file.close()
 
     program = choose_program()
 
@@ -190,8 +190,8 @@ if __name__ == "__main__":
     deck.append('</cockatrice_deck>\n')
 
     # Now write to the deck file
-    with open(direc + deckName, "w") as f:
+    with open(deck_path + deck_name, "w") as f:
         for line in deck:
             f.write(line)
 
-    print("Deck generated in %s" % direc)
+    print("Deck generated in %s" % deck_path)
