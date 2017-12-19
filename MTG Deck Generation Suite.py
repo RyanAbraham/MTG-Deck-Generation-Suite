@@ -1,5 +1,5 @@
 # MTG Random Deck Generator
-# Version 160725
+# Version 17.12.19
 #
 # To be used with Cockatrice
 
@@ -8,9 +8,9 @@ import os, random, sys, json
 # Path variables
 jsonName = 'AllCards.json'
 # Set the deck path to save to
-direc = os.getenv('APPDATA').lower().replace("roaming", "local") + "\cockatrice\cockatrice\decks\\"
+direc = "YOUR_PATH_HERE"
 deckName = 'ZZZCreated Deck.cod'
-programs = ['Random Deck Selector', 'Color Deck Generator', 'Land Generator', 'Cantrip Generator', 'Planeswalker Generator']
+programs = ['Random Deck Selector', 'Color Deck Generator', 'Land Generator']
 
 mode = 1
 
@@ -75,7 +75,7 @@ def get_random_card(**kwargs):
     return None
 
 def random_deck():
-    """
+    """Chooses one of your decks at random
     """
     deck = open(direc + random.choice(os.listdir(direc)))
     
@@ -132,7 +132,6 @@ def land_gen(num):
     colors = random.sample(['w', 'u', 'b', 'r', 'g'], num)
     for color in colors:
         colorStr = ''
-        # Add basic lands
         if(color == 'w'):
             colorStr += 'white'
         elif(color == 'u'):
@@ -153,32 +152,6 @@ def land_gen(num):
         cards += get_random_card(types = 'land')
     return cards
 
-def cantrip_gen():
-    """Generates a random deck with [num] colors in it
-    num (int) - Number of colors to generate for the deck
-    """
-    cards = ""
-    # Add non-lands
-    for i in range(30):
-        cards += get_random_card(colors = 'blue', text = 'draw a card', cmc = 1)
-    for i in range(6):
-        cards += get_random_card(colors = 'blue', text = 'draw a card')
-    cards += '        <card number="18" price="0" name="Island"/>\n'
-    for i in range(6):
-        cards += get_random_card(types = 'land')
-    return cards
-
-def planeswalker_gen():
-    """Generates a random deck with [num] colors in it
-    num (int) - Number of colors to generate for the deck
-    """
-    cards = ""
-    # Add non-lands
-    for i in range(32):
-        cards += get_random_card(types = 'planeswalker')
-    for i in range(28):
-        cards += get_random_card(types = 'land')
-    return cards
 
 def choose_program():
     """ Takes in user input to choose a program to run
@@ -194,11 +167,10 @@ def choose_program():
 
 if __name__ == "__main__":
     # Parsing the json database
-    jsonCards = open(jsonName)
-    for line in jsonCards:
-        parsedJson = json.loads(line)
-        #print(parsedJson['Nahiri, the Harbinger'])
-    jsonCards.close()
+    jsonFile = open(jsonName)
+    jsonCards = jsonFile.read()
+    parsedJson = json.loads(jsonCards)
+    jsonFile.close()
 
     program = choose_program()
 
@@ -212,15 +184,14 @@ if __name__ == "__main__":
         deck.append(color_gen(2))
     if (program == 3):
         deck.append(land_gen(2))
-    if (program == 4):
-        deck.append(cantrip_gen())
-    if (program == 5):
-        deck.append(planeswalker_gen())
 
     # Ending the Cockatrice deck file
     deck.append('    </zone>\n')
     deck.append('</cockatrice_deck>\n')
 
+    # Now write to the deck file
     with open(direc + deckName, "w") as f:
         for line in deck:
             f.write(line)
+
+    print("Deck generated in %s" % direc)
