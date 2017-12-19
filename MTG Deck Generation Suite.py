@@ -8,7 +8,7 @@ import os, random, sys, json
 # Path variables
 jsonName = 'AllCards.json'
 # Set the deck path to save to
-deck_path = "YOUR_PATH_HERE"
+deck_path = ""
 deck_name = 'ZZZCreated Deck.cod'
 programs = ['Random Deck Selector', 'Color Deck Generator', 'Land Generator']
 
